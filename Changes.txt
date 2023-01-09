@@ -1,0 +1,3 @@
+'rest_framework' included in installed app settings
+
+Employee model created and registered into the admin
