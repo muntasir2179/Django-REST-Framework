@@ -8,6 +8,11 @@ class EmployeeSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=30)
     phone = serializers.CharField(max_length=12)
 
+    def create(self, validated_data):
+        print("Create Method Called...")
+        # using double astric symbol (**), we can convert data into named argument
+        return Employee.objects.create(**validated_data)
+
 
 class UserSerializer(serializers.Serializer):
     # the data we want to access, we need to define that variables in to the class

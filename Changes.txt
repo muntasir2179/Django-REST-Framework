@@ -1,9 +1,5 @@
-serializers file added
+get and post requests handled
 
-serializers class contains same attributes like model
+data retrieved from request that has been sent by Postman
 
-serializers converts data into Json format
-
-project url is configured
-
-employeeListView function created to access data
+csrf_exempt decorator user to escape csrf exception
