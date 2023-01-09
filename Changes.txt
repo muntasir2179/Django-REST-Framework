@@ -1,3 +1,9 @@
-'rest_framework' included in installed app settings
+serializers file added
 
-Employee model created and registered into the admin
+serializers class contains same attributes like model
+
+serializers converts data into Json format
+
+project url is configured
+
+employeeListView function created to access data
