@@ -1,5 +1,1 @@
-get and post requests handled
-
-data retrieved from request that has been sent by Postman
-
-csrf_exempt decorator user to escape csrf exception
+using ModelSerializer to reduce complexity
