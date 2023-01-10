@@ -14,6 +14,12 @@ class EmployeeSerializer(serializers.Serializer):
         # using double astric symbol (**), we can convert data into named argument
         return Employee.objects.create(**validated_data)
 
+    def update(self, employee, validated_data):
+        newEmployee = Employee(**validated_data)
+        newEmployee.id = employee.id
+        newEmployee.save()
+        return newEmployee
+
 
 class UserSerializer(serializers.Serializer):
     # the data we want to access, we need to define that variables in to the class
