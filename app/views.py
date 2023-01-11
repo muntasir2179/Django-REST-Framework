@@ -10,6 +10,30 @@ from rest_framework import mixins, generics
 # Create your views here.
 
 
+# class CourseAllView(generics.ListAPIView, generics.CreateAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+
+
+# shorter version of the upper defined CourseAllView class
+class CourseAllView(generics.ListCreateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+
+# class CourseAllViewWithId(generics.RetrieveAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+
+
+# shorter version of the upper defined CourseAllViewWithId class
+class CourseAllViewWithId(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+
+# previous code is here
+'''
 class CourseAllView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     # the list() method is in the ListModelMixin
     # the create() method is in the CreateModelMixin
@@ -36,47 +60,4 @@ class CourseAllViewWithId(generics.GenericAPIView, mixins.RetrieveModelMixin, mi
 
     def delete(self, request, pk):
         return self.destroy(request, pk)
-
-
-'''
-# Assignment works
-# class based view
-class CourseAllView(APIView):
-    def get(self, request):
-        courses = Course.objects.all()
-        serializer = CourseSerializer(courses, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = CourseSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors)
-
-
-class CourseAllViewWithId(APIView):
-    def get_course(self, pk):
-        try:
-            return Course.objects.get(pk=pk)
-        except Course.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        serializer = CourseSerializer(self.get_course(pk))
-        return Response(serializer.data)
-
-    def delete(self, request, pk):
-        self.get_course(pk).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def put(self, request, pk):
-        serializer = CourseSerializer(self.get_course(pk), data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
 '''
