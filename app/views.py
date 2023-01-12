@@ -7,57 +7,46 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404
 from rest_framework import mixins, generics
+from rest_framework.viewsets import ViewSet
+
+
 # Create your views here.
+class CourseViewSets(ViewSet):
+    def list(self, request):
+        courses = Course.objects.all()
+        serializer = CourseSerializer(courses, many=True)
+        return Response(serializer.data)
 
+    def create(self, request):
+        serializer = CourseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
 
-# class CourseAllView(generics.ListAPIView, generics.CreateAPIView):
-#     queryset = Course.objects.all()
-#     serializer_class = CourseSerializer
+    def retrieve(self, request, pk):
+        try:
+            course = Course.objects.get(pk=pk)
+        except Course.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
+        serializer = CourseSerializer(course)
+        return Response(serializer.data)
 
-# shorter version of the upper defined CourseAllView class
-class CourseAllView(generics.ListCreateAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
+    def destroy(self, request, pk):
+        try:
+            course = Course.objects.get(pk=pk)
+        except Course.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
+        course.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-# class CourseAllViewWithId(generics.RetrieveAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
-#     queryset = Course.objects.all()
-#     serializer_class = CourseSerializer
-
-
-# shorter version of the upper defined CourseAllViewWithId class
-class CourseAllViewWithId(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-
-
-# previous code is here
-'''
-class CourseAllView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    # the list() method is in the ListModelMixin
-    # the create() method is in the CreateModelMixin
-    # the request methods are in GenericAPIView
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-
-    def get(self, request):
-        return self.list(request)
-
-    def post(self, request):
-        return self.create(request)
-
-
-class CourseAllViewWithId(generics.GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
-
-    def get(self, request, pk):
-        return self.retrieve(request, pk)
-
-    def put(self, request, pk):
-        return self.update(request, pk)
-
-    def delete(self, request, pk):
-        return self.destroy(request, pk)
-'''
+    def update(self, request, pk):
+        serializer = CourseSerializer(
+            Course.objects.get(pk=pk), data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
