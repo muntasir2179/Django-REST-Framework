@@ -23,5 +23,6 @@ router.register('courses', CourseViewSets, basename='course')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('api/app/', include(router.urls)),
+    path('api/nested_serializer/', include('nested_serializer.urls')),
 ]
