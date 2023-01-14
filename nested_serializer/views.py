@@ -22,7 +22,7 @@ class InstructorListView(generics.ListCreateAPIView):
     authentication_classes = [BasicAuthentication]
     # we must be logged in to the admin site to have our login data into the session
     # otherwise we will not get access to the api requested data
-    permission_classes = [WriteByAdminOnlyPermission]
+    permission_classes = [IsAuthenticated, WriteByAdminOnlyPermission]
     serializer_class = InstructorSerializer
     queryset = Instructor.objects.all()
 
