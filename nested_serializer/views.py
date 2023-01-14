@@ -45,7 +45,6 @@ class InstructorDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CourseListView(generics.ListCreateAPIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
