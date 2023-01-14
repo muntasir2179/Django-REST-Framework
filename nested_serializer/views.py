@@ -1,9 +1,19 @@
+from django.contrib.auth.models import User
 from rest_framework import generics
 from .serializers import InstructorSerializer, CourseSerializer
 from .models import Instructor, Course
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, BasePermission
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.authtoken.models import Token
 # Create your views here.
+
+
+# to create token for token authentication
+# users = User.objects.all()
+
+# for user in users:
+#     token = Token.objects.get_or_create(user=user)
+#     print(token)
 
 
 class WriteByAdminOnlyPermission(BasePermission):
@@ -35,7 +45,7 @@ class InstructorDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class CourseListView(generics.ListCreateAPIView):
-    authentication_classes = [BasicAuthentication]
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CourseSerializer
     queryset = Course.objects.all()

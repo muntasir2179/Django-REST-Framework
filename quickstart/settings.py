@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'rest_framework',
-    'nested_serializer'
+    'nested_serializer',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
