@@ -1,4 +1,0 @@
-Made a mistake in the first assignment implementation. All the requests are handled in just one view which
-was a mistake.
-
-In this code, different type of requests are handled by different views.
