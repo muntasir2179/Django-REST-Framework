@@ -7,14 +7,27 @@ from rest_framework import generics
 
 # Create your views here.
 
+class ReviewCreate(generics.CreateAPIView):
+    serializer_class = ReviewSerializer
+    
+    # overriding the perform_create() method for applying our custom logic
+    def perform_create(self, serializer):
+        pk = self.kwargs['pk']   # accessing dynamic segment (pk) value from kwargs
+        watchlist = WatchList.objects.get(pk=pk)   # fetching the watchlist for witch the review is submitted
+        serializer.save(watchlist=watchlist)   # saving the review for that specific watchlist
+
+
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
 
 
 class ReviewList(generics.ListCreateAPIView):
-    queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
+    
+    # overriding the queryset to fetch specific watchlist reviews
+    def get_queryset(self):
+        return Reviews.objects.filter(watchlist=self.kwargs['pk'])   # accessing dynamic segment (pk) value from kwargs
 
 
 class StreamPlatformAV(APIView):
