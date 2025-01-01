@@ -3,27 +3,18 @@ from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSe
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework import generics, mixins
+from rest_framework import generics
 
 # Create your views here.
 
-class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)   # retrieve() method is used for fetching single record from database
 
 
-class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class ReviewList(generics.ListCreateAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
-    
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)   # list() method is used for fetching all record from database
-    
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)   # create() method is used for adding single record to the database
 
 
 class StreamPlatformAV(APIView):
