@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -30,24 +32,23 @@ class ReviewList(generics.ListCreateAPIView):
         return Reviews.objects.filter(watchlist=self.kwargs['pk'])   # accessing dynamic segment (pk) value from kwargs
 
 
-class StreamPlatformAV(APIView):
-    def get(self, request):
-        try:
-            platform = StreamPlatform.objects.all()
-        except StreamPlatform.DoesNotExist:
-            return Response({'error': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = StreamPlatformSerializer(platform, many=True)  # When serializer have to go through more than one object we have to set 'many=True'
-        
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+# class StreamPlatformVS(viewsets.ViewSet):
+#     def list(self, request):
+#         queryset = StreamPlatform.objects.all()
+#         serializer = StreamPlatformSerializer(queryset, many=True)
+#         return Response(serializer.data)
     
-    def post(self, request):
-        serializer = StreamPlatformSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors)
+#     def retrieve(self, request, pk=None):
+#         queryset = StreamPlatform.objects.all()
+#         watchlist = get_object_or_404(queryset, pk=pk)
+#         serializer = StreamPlatformSerializer(watchlist)
+#         return Response(serializer.data)
+
+
+# this class now will be able to perform all the operations (create read update delete)
+class StreamPlatformVS(viewsets.ModelViewSet):   # We can use ReadOnlyModelViewSet class to restrict access to our data
+    queryset = StreamPlatform.objects.all()
+    serializer_class = StreamPlatformSerializer
     
     
 class StreamPlatformDetailsAv(APIView):
