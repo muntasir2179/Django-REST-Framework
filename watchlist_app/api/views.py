@@ -6,17 +6,28 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
 
 # Create your views here.
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     
+    def get_queryset(self):
+        return Reviews.objects.all()
+    
     # overriding the perform_create() method for applying our custom logic
     def perform_create(self, serializer):
         pk = self.kwargs['pk']   # accessing dynamic segment (pk) value from kwargs
         watchlist = WatchList.objects.get(pk=pk)   # fetching the watchlist for witch the review is submitted
-        serializer.save(watchlist=watchlist)   # saving the review for that specific watchlist
+        
+        review_user = self.request.user
+        review_queryset = Reviews.objects.filter(watchlist=watchlist, review_user=review_user)
+        
+        if review_queryset.exists():
+            raise ValidationError("You have already reviewed this movie!")
+        
+        serializer.save(watchlist=watchlist, review_user=review_user)   # saving the review for that specific watchlist
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
