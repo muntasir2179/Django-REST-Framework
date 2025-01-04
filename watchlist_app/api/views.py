@@ -7,6 +7,7 @@ from rest_framework import generics
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 # Create your views here.
 
@@ -33,10 +34,12 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]    # only authenticated users will be able to send post and put request
 
 
 class ReviewList(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]    # only authenticated users will be able to send post and put request
     
     # overriding the queryset to fetch specific watchlist reviews
     def get_queryset(self):
