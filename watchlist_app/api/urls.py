@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('', include(router.urls)),   # this router will take care of both serving all stream platform data and an individual one
     
-    path('stream/<int:pk>/review-create', view=views.ReviewCreate.as_view(), name='review-create'),
-    path('stream/<int:pk>/review', view=views.ReviewList.as_view(), name='review-list'),
-    path('stream/review/<int:pk>/', view=views.ReviewDetail.as_view(), name='review-detail'),
+    path('<int:pk>/review-create', view=views.ReviewCreate.as_view(), name='review-create'),
+    path('<int:pk>/review', view=views.ReviewList.as_view(), name='review-list'),
+    path('review/<int:pk>/', view=views.ReviewDetail.as_view(), name='review-detail'),
 ]
