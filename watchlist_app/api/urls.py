@@ -18,6 +18,6 @@ urlpatterns = [
     path('', include(router.urls)),   # this router will take care of both serving all stream platform data and an individual one
     
     path('<int:pk>/review-create', view=views.ReviewCreate.as_view(), name='review-create'),
-    path('<int:pk>/review', view=views.ReviewList.as_view(), name='review-list'),
+    path('<int:pk>/reviews/', view=views.ReviewList.as_view(), name='review-list'),
     path('review/<int:pk>/', view=views.ReviewDetail.as_view(), name='review-detail'),
 ]
