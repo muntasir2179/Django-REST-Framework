@@ -2,6 +2,14 @@ from rest_framework.decorators import api_view
 from .serializers import RegistrationSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework import status
+
+
+@api_view(['POST',])
+def logout_view(request):
+    if request.method == 'POST':
+        request.user.auth_token.delete()   # deleting the token which will prevent further access
+        return Response({'response': 'Logout Successful!'} ,status=status.HTTP_200_OK)
 
 
 @api_view(["POST",])
