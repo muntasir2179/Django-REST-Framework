@@ -26,7 +26,6 @@ def registration_view(request):
             data['email'] = account.email   # accessing email through account
             
             token = Token.objects.get_or_create(user=account)[0].key    # if token is already exists for this user it will just return it, if not exists it will create a new one and return
-            print(token)
             data['token'] = token
         else:
             data = serializer.errors   # if registration is failed we will return error messages from serializer

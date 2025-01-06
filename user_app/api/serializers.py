@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    # the serializer class attributes are not used to store in database it is only defined for temporary purposes
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
     
     class Meta:
