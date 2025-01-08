@@ -132,15 +132,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }
 
-
-# settings for simple jwt
-SIMPLE_JWT = {
-    # it will enable the feature of sending additional refresh token alongside new access token each time when user try to renew their access token
-    # this setting will not expire the previous token
-    'ROTATE_REFRESH_TOKENS': True,
-}
