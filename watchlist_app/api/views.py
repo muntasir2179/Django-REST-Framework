@@ -50,7 +50,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ReviewList(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
-    # permission_classes = [IsAuthenticated]    # only authenticated users will be able to send post and put request
+    permission_classes = [IsAuthenticated]    # only authenticated users will be able to send post and put request
     
     # overriding the queryset to fetch specific watchlist reviews
     def get_queryset(self):
