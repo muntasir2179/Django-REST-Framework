@@ -1,8 +1,10 @@
 from rest_framework.decorators import api_view
-from .serializers import RegistrationSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from .serializers import RegistrationSerializer
 
 
 @api_view(['POST',])
@@ -25,8 +27,14 @@ def registration_view(request):
             data['username'] = account.username   # accessing username through account
             data['email'] = account.email   # accessing email through account
             
-            token = Token.objects.get_or_create(user=account)[0].key    # if token is already exists for this user it will just return it, if not exists it will create a new one and return
-            data['token'] = token
+            # token = Token.objects.get_or_create(user=account)[0].key    # if token is already exists for this user it will just return it, if not exists it will create a new one and return
+            # data['token'] = token
+            
+            refresh = RefreshToken.for_user(account)  # creating refresh and access tokens for the user
+            data['token'] = {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token)
+            }
         else:
             data = serializer.errors   # if registration is failed we will return error messages from serializer
         
