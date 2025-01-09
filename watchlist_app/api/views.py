@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle, ScopedRateThrottle
 
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.models import WatchList, StreamPlatform, Reviews
@@ -50,7 +50,9 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]    # only review owner will be granted access to all types of operations
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    throttle_classes = [ScopedRateThrottle]
+    # we can also use this scope into other view classes as well
+    throttle_scope = 'review-detail'   # the throttle rate for this view is defined in throttle settings
 
 
 class ReviewList(generics.ListCreateAPIView):
@@ -61,19 +63,6 @@ class ReviewList(generics.ListCreateAPIView):
     # overriding the queryset to fetch specific watchlist reviews
     def get_queryset(self):
         return Reviews.objects.filter(watchlist=self.kwargs['pk'])   # accessing dynamic segment (pk) value from kwargs
-
-
-# class StreamPlatformVS(viewsets.ViewSet):
-#     def list(self, request):
-#         queryset = StreamPlatform.objects.all()
-#         serializer = StreamPlatformSerializer(queryset, many=True)
-#         return Response(serializer.data)
-    
-#     def retrieve(self, request, pk=None):
-#         queryset = StreamPlatform.objects.all()
-#         watchlist = get_object_or_404(queryset, pk=pk)
-#         serializer = StreamPlatformSerializer(watchlist)
-#         return Response(serializer.data)
 
 
 # this class now will be able to perform all the operations (create read update delete)

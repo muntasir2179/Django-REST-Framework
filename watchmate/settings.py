@@ -143,8 +143,11 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '5/day',
         'user': '10/day',
+        
+        # we can add rates for custom defined throttle scopes here
         'review-create': '1/day',    #  'custom-throttle-class-scope': 'rate'
         'review-list': '10/day',     #  'custom-throttle-class-scope': 'rate'
+        'review-detail': '2/day',
     }
 }
 
