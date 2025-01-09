@@ -9,11 +9,14 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.models import WatchList, StreamPlatform, Reviews
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
+from .throttling import ReviewCreateThrottle, ReviewListThrottle
+
 # Create your views here.
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]    # only authenticated users can create a review
+    throttle_classes = [ReviewCreateThrottle]
     
     def get_queryset(self):
         return Reviews.objects.all()
@@ -53,7 +56,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class ReviewList(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
     # permission_classes = [IsAuthenticated]    # only authenticated users will be able to send post and put request
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    throttle_classes = [ReviewListThrottle, AnonRateThrottle]
     
     # overriding the queryset to fetch specific watchlist reviews
     def get_queryset(self):
