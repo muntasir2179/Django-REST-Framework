@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.models import WatchList, StreamPlatform, Reviews
@@ -46,11 +47,13 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]    # only review owner will be granted access to all types of operations
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
 
 
 class ReviewList(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]    # only authenticated users will be able to send post and put request
+    # permission_classes = [IsAuthenticated]    # only authenticated users will be able to send post and put request
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     
     # overriding the queryset to fetch specific watchlist reviews
     def get_queryset(self):
