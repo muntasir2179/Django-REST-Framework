@@ -1,10 +1,11 @@
 from rest_framework.response import Response
-from rest_framework import status, generics, viewsets
+from rest_framework import status, generics, viewsets, filters
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle, ScopedRateThrottle
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.models import WatchList, StreamPlatform, Reviews
@@ -74,6 +75,10 @@ class ReviewList(generics.ListCreateAPIView):
     # permission_classes = [IsAuthenticated]    # only authenticated users will be able to send post and put request
     throttle_classes = [ReviewListThrottle, AnonRateThrottle]
     
+    # these two class attributes will be used to do filter operations
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['review_user__username', 'active']  # we need to specify the field names by which we want to filter into the 'filterset_fields'
+    
     # overriding the queryset to fetch specific watchlist reviews
     def get_queryset(self):
         return Reviews.objects.filter(watchlist=self.kwargs['pk'])   # accessing dynamic segment (pk) value from kwargs
@@ -117,6 +122,29 @@ class StreamPlatformDetailsAv(APIView):
         platform = StreamPlatform.objects.get(pk=pk)
         platform.delete()
         return Response({"error": "Platform data is successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+
+
+class WatchListNewAV(generics.ListAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
+    
+    # # class attributes for using filters
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['title', 'platform__name']
+    
+    # # class attributes for using search
+    # '''
+    # ^	istartswith	Starts-with search.
+    # =	iexact	Exact matches.
+    # $	iregex	Regex search.
+    # @	search	Full-text search (Currently only supported Django's PostgreSQL backend).
+    # '''
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['title', 'platform__name']
+    
+    # class attributes for using ordering
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['avg_rating']
 
 
 class WatchListAV(APIView):
