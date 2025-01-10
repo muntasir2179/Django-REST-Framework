@@ -124,7 +124,7 @@ class StreamPlatformDetailsAv(APIView):
         return Response({"error": "Platform data is successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
 
 
-class WatchListNewAV(generics.ListAPIView):
+class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
     
