@@ -13,6 +13,20 @@ from .throttling import ReviewCreateThrottle, ReviewListThrottle
 
 # Create your views here.
 
+
+class UserReview(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    
+    def get_queryset(self):
+        try:
+            username = self.kwargs['username']   # we can access dynamic segment value of 'username'
+        except:
+            username = self.request.query_params.get('username', None)   # we can access query params like this
+        
+        # when we use a foreignkey field for filtering we have to specify the relational field name using double underscore '__'
+        return Reviews.objects.filter(review_user__username=username)
+
+
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]    # only authenticated users can create a review

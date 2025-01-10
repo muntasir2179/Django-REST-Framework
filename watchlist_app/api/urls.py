@@ -20,4 +20,7 @@ urlpatterns = [
     path('<int:pk>/review-create/', view=views.ReviewCreate.as_view(), name='review-create'),
     path('<int:pk>/reviews/', view=views.ReviewList.as_view(), name='review-list'),
     path('review/<int:pk>/', view=views.ReviewDetail.as_view(), name='review-detail'),
+    
+    path('reviews/<str:username>/', view=views.UserReview.as_view(), name='user-review-detail'),
+    path('reviews/', view=views.UserReview.as_view(), name='user-review-detail-query-param'),
 ]
