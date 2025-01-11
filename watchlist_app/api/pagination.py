@@ -1,4 +1,4 @@
-from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination, CursorPagination
 
 
 # define your custom pagination classes here
@@ -17,3 +17,10 @@ class WatchListLOPagination(LimitOffsetPagination):
     limit_query_param = 'limit'
     offset_query_param = 'start'
 
+
+class WatchListCursorPagination(CursorPagination):
+    # cursor pagination by default uses ordering
+    # so if there are some ordering applied in views it is going to through errors
+    page_size = 5
+    ordering = 'created'
+    cursor_query_param = 'record'
