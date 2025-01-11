@@ -149,6 +149,10 @@ REST_FRAMEWORK = {
         'review-create': '1/day',    #  'custom-throttle-class-scope': 'rate'
         'review-list': '10/day',     #  'custom-throttle-class-scope': 'rate'
         'review-detail': '2/day',
-    }
+    },
+    
+    # global setting for pagination, it will apply pagination to all the view classes
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 100
 }
 
