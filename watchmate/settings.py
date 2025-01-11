@@ -154,5 +154,10 @@ REST_FRAMEWORK = {
     # global setting for pagination, it will apply pagination to all the view classes
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'PAGE_SIZE': 100
+    
+    # this setting will disable the browsable api and render data in json format
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
 }
 
