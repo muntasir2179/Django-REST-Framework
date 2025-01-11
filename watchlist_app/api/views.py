@@ -11,7 +11,7 @@ from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.models import WatchList, StreamPlatform, Reviews
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
 from .throttling import ReviewCreateThrottle, ReviewListThrottle
-from .pagination import WatchListPagination
+from .pagination import WatchListPagination, WatchListLOPagination
 
 # Create your views here.
 
@@ -147,7 +147,7 @@ class WatchListGV(generics.ListAPIView):
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['avg_rating']
     
-    pagination_class = WatchListPagination
+    pagination_class = WatchListLOPagination
 
 
 class WatchListAV(APIView):
