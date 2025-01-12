@@ -31,4 +31,4 @@ def registration_view(request):
         else:
             data = serializer.errors   # if registration is failed we will return error messages from serializer
         
-        return Response(data)
+        return Response(data, status=status.HTTP_201_CREATED)
