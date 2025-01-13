@@ -146,9 +146,9 @@ REST_FRAMEWORK = {
         'user': '10/day',
         
         # we can add rates for custom defined throttle scopes here
-        'review-create': '1/day',    #  'custom-throttle-class-scope': 'rate'
+        'review-create': '5/day',    #  'custom-throttle-class-scope': 'rate'
         'review-list': '10/day',     #  'custom-throttle-class-scope': 'rate'
-        'review-detail': '2/day',
+        'review-detail': '5/day',
     },
     
     # global setting for pagination, it will apply pagination to all the view classes
